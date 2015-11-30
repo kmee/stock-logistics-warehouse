@@ -19,7 +19,13 @@
 #
 ##############################################################################
 
-from . import stock_location
-from . import stock_reserve
-from . import product
+from openerp import models, fields
 
+
+class StockLocation(models.Model):
+
+    _inherit = 'stock.location'
+
+    reserved = fields.Boolean('Reserved',
+                              help='This location is to be used for '
+                                   'stock that has been reserved.')

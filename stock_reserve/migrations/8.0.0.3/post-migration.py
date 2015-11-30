@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Author: Guewen Baconnier
-#    Copyright 2013 Camptocamp SA
+#    Author: Leonardo Pistone
+#    Copyright 2015 Camptocamp SA
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -16,10 +14,19 @@
 #
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
 
-from . import stock_location
-from . import stock_reserve
-from . import product
 
+def migrate(cr, installed_version):
+    if not installed_version:
+        return
+    """Update default stock reserve location with new attribute"""
+    cr.execute('''
+        UPDATE stock_location
+        SET reserved = True
+        WHERE id = (
+            SELECT res_id
+            FROM ir_model_data
+            WHERE name = 'stock_location_reservation'
+            AND module = 'stock_reserve'
+        );
+    ''')

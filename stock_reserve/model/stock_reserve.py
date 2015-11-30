@@ -71,20 +71,6 @@ class StockReservation(models.Model):
         return res
 
     @api.model
-    def get_location_from_ref(self, ref):
-        """ Get a location from a xmlid if allowed
-        :param ref: tuple (module, xmlid)
-        """
-        data_obj = self.env['ir.model.data']
-        try:
-            location = data_obj.xmlid_to_object(ref, raise_if_not_found=True)
-            location.check_access_rule('read')
-            location_id = location.id
-        except (except_orm, ValueError):
-            location_id = False
-        return location_id
-
-    @api.model
     def _default_picking_type_id(self):
         """ Search for an internal picking type
         """
@@ -105,8 +91,13 @@ class StockReservation(models.Model):
 
     @api.model
     def _default_location_dest_id(self):
-        ref = 'stock_reserve.stock_location_reservation'
-        return self.get_location_from_ref(ref)
+        location_obj = self.env['stock.location']
+        dest_locs = location_obj.search([('reserved', '=', True)], limit=1)
+        if dest_locs:
+            location_id = dest_locs[0].id
+        else:
+            location_id = False
+        return location_id
 
     _defaults = {
         'picking_type_id': _default_picking_type_id,

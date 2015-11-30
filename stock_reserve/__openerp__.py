@@ -32,6 +32,7 @@
              ],
  'demo': [],
  'data': ['view/stock_reserve.xml',
+          'view/stock_location.xml',
           'view/product.xml',
           'data/stock_data.xml',
           'security/ir.model.access.csv',
