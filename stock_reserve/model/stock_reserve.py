@@ -20,7 +20,6 @@
 ##############################################################################
 
 from openerp import models, fields, api
-from openerp.exceptions import except_orm
 from openerp.tools.translate import _
 
 
