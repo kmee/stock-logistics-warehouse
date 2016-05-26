@@ -181,7 +181,8 @@ class SaleOrderLine(models.Model):
                     "be automatically adjusted to %.2f.") % qty
             msg += "\n\n"
             result.setdefault('warning', {})
-            if result['warning'].get('message'):
+            if (isinstance(result['warning'], dict) and
+                    result['warning'].get('message')):
                 result['warning']['message'] += msg
             else:
                 result['warning'] = {
